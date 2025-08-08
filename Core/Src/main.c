@@ -18,7 +18,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "stdio.h"
+#include "stdio.h" //ajout pour utiliser printf
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
@@ -52,9 +52,9 @@ static void MX_GPIO_Init(void);
 static void MX_USART2_UART_Init(void);
 int __io_putchar(int ch);
 /* USER CODE BEGIN PFP */
-uint32_t blink_delays[] = {2000, 1000, 500, 100};
-volatile uint8_t current_delay_index = 0;
-volatile uint8_t print_needed = 0;
+uint32_t blink_delays[] = {2000, 1000, 500, 100}; //tableau des différentes fréquences de clignotement
+volatile uint8_t current_delay_index = 0; //variable de stockage de l'index du tableau
+volatile uint8_t print_needed = 0; //flag pour imprimer ou non la fréquence de clignotement
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -93,7 +93,7 @@ int main(void)
   MX_GPIO_Init();
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
-  printf("Vitesse de clignottement: %lu ms\r\n", blink_delays[current_delay_index]);
+  printf("Vitesse de clignottement: %lu ms\r\n", blink_delays[current_delay_index]); //j'écris une toute première fois la valeur de clignotement
 
   /* USER CODE END 2 */
 
@@ -102,13 +102,13 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-	HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
-	HAL_Delay(blink_delays[current_delay_index]);
+	HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5); //on inverse la valeur de la pin 5 qui est la LED
+	HAL_Delay(blink_delays[current_delay_index]); //on attend
 
-	if (print_needed == 1)
+	if (print_needed == 1) //on vérifie si il y a eu un changement de fréquence
 	{
 		printf("Vitesse de clignottement: %lu ms\r\n", blink_delays[current_delay_index]);
-		print_needed = 0;
+		print_needed = 0; //on remet le flag à 0
 	}
     /* USER CODE BEGIN 3 */
   }
@@ -236,10 +236,11 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
     if (GPIO_Pin == GPIO_PIN_13) // bouton B1
     {
         current_delay_index = (current_delay_index + 1) % 4;
-        print_needed = 1;    }
+        print_needed = 1;     //on met le flag à 1 car il y a eu changement de fréquence
+    }
 }
 
-int __io_putchar(int ch)
+int __io_putchar(int ch) //permet de connecter le printf à l'UART
 {
     HAL_UART_Transmit(&huart2, (uint8_t *)&ch, 1, HAL_MAX_DELAY);
     return ch;
