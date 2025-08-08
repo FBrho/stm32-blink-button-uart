@@ -1,0 +1,17 @@
+# Fichiers STM32CubeIDE à ignorer
+*.launch
+*.log
+*.tmp
+*.bak
+*.o
+*.d
+*.elf
+*.bin
+*.hex
+*.map
+*.swp
+*.swo
+*.dep
+*.list
+Debug/
+Release/
